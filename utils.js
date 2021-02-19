@@ -15,7 +15,7 @@ function Construct_Wall(X, Y) {
 		W = [100, 10];
 	}
 	var B = Aa(A, W);
-	if (Y.type.curve === true) {
+	if (Y.type && Y.type.curve === true) {
 		if (Y.type.curvature > 0.49) {
 			Y.type.curvature = 0.35;
 		} else if (Y.type.curvature < 0.01) {
