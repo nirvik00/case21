@@ -11,7 +11,7 @@ const base_points = [
 // straight wall with polygon basse
 const wall_data1 = {
 	height: 200,
-	depth: 10,
+	depth: 30,
 };
 
 //also straight wall with polygon basse
@@ -24,7 +24,7 @@ const wall_data2 = {
 // curved wall
 const wall_data3 = {
 	type: { curve: true, curvature: 0.5, smoothness: 10 },
-	height: 200,
+	height: 100,
 	depth: 10,
 };
 
@@ -38,11 +38,7 @@ function setup() {
 function draw() {
 	background(255);
 	camera(500, 500, 500, 0, 0, 0, 0, 0, 1);
-
 	// calls utils.js to create a "wall-mesh" off the base points
 	// use wall_data to provide the wall height and wall depth (thickness)
-	Construct_Wall(base_points, wall_data3);
-
-	// use default wall_data
-	// Construct_Wall(base_points);
+	Construct_Wall(base_points, wall_data1);
 }

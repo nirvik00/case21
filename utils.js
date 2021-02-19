@@ -1,8 +1,8 @@
 /*
- * Design Programming at CASE, RPI, 2021
- * Course instructor Prof. Dennis Shelden
- * Code implemented by Nirvik Saha
- * Do not modify unless you know what/how to...
+ *	 	Design Programming at CASE, RPI, 2021
+ *	 	Course instructor Prof. Dennis Shelden
+ * 		Code developed by Nirvik Saha
+ * 		Please do not modify unless you know what/how to...
  */
 
 function Construct_Wall(X, Y) {
@@ -87,19 +87,19 @@ var C = (A, c, s) => {
 			r = A[i + 1];
 		}
 		let m = {
-			x: p.x + (q.x - p.x) * c,
-			y: p.y + (q.y - p.y) * c,
-			z: p.z + (q.z - p.z) * c,
+			x: p.x + V(p, q).x * c,
+			y: p.y + V(p, q).y * c,
+			z: p.z + V(p, q).z * c,
 		};
 		let a = {
-			x: q.x + (p.x - q.x) * c,
-			y: q.y + (p.y - q.y) * c,
-			z: q.z + (p.z - q.z) * c,
+			x: q.x + V(q, p).x * c,
+			y: q.y + V(q, p).y * c,
+			z: q.z + V(q, p).z * c,
 		};
 		let b = {
-			x: q.x + (r.x - q.x) * c,
-			y: q.y + (r.y - q.y) * c,
-			z: q.z + (r.z - q.z) * c,
+			x: q.x + V(q, r).x * c,
+			y: q.y + V(q, r).y * c,
+			z: q.z + V(q, r).z * c,
 		};
 		let f = L(a, q, s);
 		let g = L(q, b, s);
@@ -114,7 +114,7 @@ var C = (A, c, s) => {
 };
 var D = (p, q) => {
 	return Math.sqrt(
-		Math.pow(p.x - q.x, 2) + Math.pow(p.y - q.y, 2) + Math.pow(p.z - q.z, 2)
+		Math.pow(V(p, q).x, 2) + Math.pow(V(p, q).y, 2) + Math.pow(V(p, q).z, 2)
 	);
 };
 var D1 = (u, v) => {
@@ -160,9 +160,9 @@ var L = (p, q, n) => {
 	let i = 0.0;
 	while (i < 1.0 + 1.0 / n) {
 		let r = {
-			x: p.x + (q.x - p.x) * i,
-			y: p.y + (q.y - p.y) * i,
-			z: p.z + (q.z - p.z) * i,
+			x: p.x + V(p, q).x * i,
+			y: p.y + V(p, q).y * i,
+			z: p.z + V(p, q).z * i,
 		};
 		X.push(r);
 		i += 1.0 / n;
@@ -180,10 +180,12 @@ var N2 = (u) => {
 };
 var O = (A, e) => {
 	var R = [];
-	for (let i = 0; i < A.length - 1; i++) {
+	let i = 0;
+	while (i < A.length - 1) {
 		let p = T(A[i], S(N1(U(A[i], A[i + 1])), e)),
 			q = T(A[i + 1], S(N1(U(A[i], A[i + 1])), e));
 		R.push({ p, q });
+		i++;
 	}
 	let X = I(R);
 	return X;
