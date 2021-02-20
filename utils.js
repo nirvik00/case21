@@ -4,7 +4,15 @@
  * 		Code developed by Nirvik Saha
  * 		Please do not modify unless you know what/how to...
  */
-
+function Construct_Block(X, Y) {
+	var a = [...X];
+	a.push(a[0]);
+	var b = Aa(a, Y);
+	CSV(a, b);
+	CSH1(a);
+	CSH1(b);
+}
+function Extrude_Shape(X, Y) {}
 function Construct_Wall(X, Y) {
 	var A = [...X];
 	A.push(A[0]);
@@ -14,7 +22,7 @@ function Construct_Wall(X, Y) {
 	} catch (e) {
 		W = [100, 10];
 	}
-	var B = Aa(A, W);
+	var B = Aa(A, W[0]);
 	if (Y.type && Y.type.curve === true) {
 		if (Y.type.curvature > 0.49) {
 			Y.type.curvature = 0.35;
@@ -28,22 +36,28 @@ function Construct_Wall(X, Y) {
 		}
 		let a = C(A, Y.type.curvature, Y.type.smoothness);
 		let b = C(B, Y.type.curvature, Y.type.smoothness);
-		CS(a, b);
-		CS(O(a, W[1]), O(b, W[1]));
+		CSV(a, b);
+		CSV(O(a, W[1]), O(b, W[1]));
+		CSH2(a, O(a, W[1]));
+		CSH2(b, O(b, W[1]));
 	} else {
-		CS(A, B);
-		CS(O(A, W[1]), O(B, W[1]));
+		CSV(A, B);
+		CSV(O(A, W[1]), O(B, W[1]));
+		CSH2(A, O(A, W[1]));
+		CSH2(B, O(B, W[1]));
 	}
 }
 var Aa = (A, e) => {
 	let X = [];
 	A.forEach((p) => {
-		let q = { x: p.x, y: p.y, z: p.z + e[0] };
+		let q = { x: p.x, y: p.y, z: p.z + e };
 		X.push(q);
 	});
 	return X;
 };
-var CS = (A, B) => {
+var CSV = (A, B) => {
+	fill(237, 34, 93, 150);
+	stroke(0);
 	var i = 0;
 	while (i < A.length - 1) {
 		beginShape(TRIANGLE_STRIP);
@@ -62,16 +76,49 @@ var CS = (A, B) => {
 		endShape(CLOSE);
 		i++;
 	}
+	noFill();
+	noStroke();
+};
+var CSH1 = (A) => {
+	noStroke();
+	fill(0, 0, 255, 100);
+	for (let i = 1; i < A.length - 1; i++) {
+		beginShape(TRIANGLE_STRIP);
+		vertex(A[0].x, A[0].y, A[0].z);
+		vertex(A[i].x, A[i].y, A[i].z);
+		vertex(A[i + 1].x, A[i + 1].y, A[i + 1].z);
+		endShape();
+	}
+	noFill();
+	stroke(0);
+};
+var CSH2 = (A, B) => {
+	stroke(0);
+	fill(0, 0, 255, 100);
+	for (let i = 0; i < A.length - 1; i++) {
+		fill(0, 0, 255, 100);
+		beginShape();
+		vertex(A[i].x, A[i].y, A[i].z);
+		vertex(B[i].x, B[i].y, B[i].z);
+		vertex(B[i + 1].x, B[i + 1].y, B[i + 1].z);
+		vertex(A[i + 1].x, A[i + 1].y, A[i + 1].z);
+		vertex(A[i].x, A[i].y, A[i].z);
+		endShape();
+	}
+	noFill();
+	stroke(0);
 };
 var DS = (A) => {
+	fill(237, 34, 93, 150);
+	stroke(0);
 	for (let i = 0; i < A.length - 1; i++) {
-		let p = A[i];
-		let q = A[i + 1];
 		beginShape();
-		vertex(p.x, p.y, p.z);
-		vertex(q.x, q.y, q.z);
+		vertex(A[i].x, A[i].y, A[i].z);
+		vertex(A[i + 1].x, A[i + 1].y, A[i + 1].z);
 		endShape(CLOSE);
 	}
+	noFill();
+	noStroke();
 };
 var C = (A, c, s) => {
 	let X = [];
