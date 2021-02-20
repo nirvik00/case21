@@ -52,7 +52,7 @@ function draw() {
 	rotateX(0.5);
 	// calls utils.js to create a "wall-mesh" off the base points
 	// use wall_data to provide the wall height and wall depth (thickness)
-	// Construct_Wall(base_points, wall_data3);
+	// Construct_Wall(base_points, wall_data1);
 	//
 	let extrusion_height = 100;
 	Extrude_Shape(base_points, extrusion_height);
