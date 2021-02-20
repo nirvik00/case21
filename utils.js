@@ -4,7 +4,7 @@
  * 		Code developed by Nirvik Saha
  * 		Please do not modify unless you know what/how to...
  */
-function Construct_Block(X, Y) {
+function Extrude_Shape(X, Y) {
 	var a = [...X];
 	a.push(a[0]);
 	var b = Aa(a, Y);
@@ -12,7 +12,6 @@ function Construct_Block(X, Y) {
 	CSH1(a);
 	CSH1(b);
 }
-function Extrude_Shape(X, Y) {}
 function Construct_Wall(X, Y) {
 	var A = [...X];
 	A.push(A[0]);

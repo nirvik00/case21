@@ -4,7 +4,7 @@
  * 		Code developed by Nirvik Saha
  *		Look for the following functions to manipulate:
  * 		1. extrude a shape:
- * 			Construct_Block ( base_points, extrusion_height )
+ * 			Extrude_Shape ( base_points, extrusion_height )
  * 		2. shell/wall-mesh construction:
  * 			Construct_Wall ( base_points, wall_data )
  */
@@ -52,8 +52,8 @@ function draw() {
 	rotateX(0.5);
 	// calls utils.js to create a "wall-mesh" off the base points
 	// use wall_data to provide the wall height and wall depth (thickness)
-	Construct_Wall(base_points, wall_data1);
+	Construct_Wall(base_points, wall_data3);
 	//
 	let extrusion_height = 100;
-	// Construct_Block(base_points, extrusion_height);
+	// Extrude_Shape(base_points, extrusion_height);
 }
