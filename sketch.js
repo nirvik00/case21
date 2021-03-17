@@ -18,17 +18,34 @@ const base_points = [
 	{ x: 0, y: 2 * a, z: 0 },
 	{ x: -a, y: a, z: 0 },
 ];
-
+let ht = 100;
+const base_points_ht = [
+	{ x: -a, y: -a, z: ht },
+	{ x: 0, y: -a * 2, z: ht },
+	{ x: a, y: -a, z: ht },
+	{ x: a, y: a, z: ht },
+	{ x: 0, y: 2 * a, z: ht },
+	{ x: -a, y: a, z: ht },
+];
+let ht_ = 250;
+const base_points_ht_ = [
+	{ x: -a, y: -a, z: ht_ },
+	{ x: 0, y: -a * 2, z: ht_ },
+	{ x: a, y: -a, z: ht_ },
+	{ x: a, y: a, z: ht_ },
+	{ x: 0, y: 2 * a, z: ht_ },
+	{ x: -a, y: a, z: ht_ },
+];
 // straight wall with polygon basse
 const wall_data1 = {
-	height: 200,
-	depth: 30,
+	height: 100,
+	depth: 20,
 };
 
 //also straight wall with polygon basse
 const wall_data2 = {
 	type: { curve: false },
-	height: 200,
+	height: 100,
 	depth: 10,
 };
 
@@ -52,8 +69,11 @@ function draw() {
 	rotateX(0.5);
 	// calls utils.js to create a "wall-mesh" off the base points
 	// use wall_data to provide the wall height and wall depth (thickness)
-	// Construct_Wall(base_points, wall_data1);
+	Construct_Wall(base_points, wall_data1);
+	Construct_Wall(base_points_ht, wall_data1);
+	Construct_Wall(base_points_ht_, wall_data2);
+
 	//
 	let extrusion_height = 100;
-	Extrude_Shape(base_points, extrusion_height);
+	// Extrude_Shape(base_points, extrusion_height);
 }
