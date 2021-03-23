@@ -15,12 +15,22 @@ function Extrude_Shape(X, Y) {
 }
 function Construct_Wall(X, Y) {
 	var A = [...X];
-	A.push(A[0]);
 	var W = [];
+	// console.log(Y.closed);
 	try {
-		W = [Y.height, Y.depth];
+		W = [Y.height, Y.depth, Y.closed];
 	} catch (e) {
 		W = [100, 10];
+	}
+	if (Y.closed === undefined) {
+		Y.closed = true;
+	}
+	try {
+		if (Y.closed === true) {
+			A.push(A[0]);
+		}
+	} catch (err) {
+		A.push(A[0]); // closed not defined, default closed
 	}
 	var B = Aa(A, W[0]);
 	if (Y.type && Y.type.curve === true) {
@@ -41,10 +51,13 @@ function Construct_Wall(X, Y) {
 		CSH2(a, O(a, W[1]));
 		CSH2(b, O(b, W[1]));
 	} else {
-		CSV(A, B);
-		CSV(O(A, W[1]), O(B, W[1]));
-		CSH2(A, O(A, W[1]));
-		CSH2(B, O(B, W[1]));
+		CSV(A, B, Y.closed);
+		CSV(O(A, W[1], Y.closed), O(B, W[1], Y.closed), Y.closed);
+		CSH2(A, O(A, W[1], closed));
+		CSH2(B, O(B, W[1], Y.closed), Y.closed);
+		if (Y.closed === false) {
+			CSN(A, O(A, W[1], closed), B, O(B, W[1], closed));
+		}
 	}
 }
 var Aa = (A, e) => {
@@ -55,7 +68,28 @@ var Aa = (A, e) => {
 	});
 	return X;
 };
-var CSV = (A, B) => {
+var CSN = (A, B, C, D) => {
+	fill(0, 10, 255);
+	let i = 0;
+	beginShape(TRIANGLE_STRIP);
+	vertex(A[i].x, A[i].y, A[i].z);
+	vertex(B[i].x, B[i].y, B[i].z);
+	vertex(C[i].x, C[i].y, C[i].z);
+
+	vertex(D[i].x, D[i].y, D[i].z);
+	endShape();
+	noFill();
+	fill(0, 10, 255);
+	let j = A.length - 1;
+	beginShape(TRIANGLE_STRIP);
+	vertex(A[j].x, A[j].y, A[j].z);
+	vertex(B[j].x, B[j].y, B[j].z);
+	vertex(C[j].x, C[j].y, C[j].z);
+	vertex(D[j].x, D[j].y, D[j].z);
+	endShape();
+	noFill();
+};
+var CSV = (A, B, closed = true) => {
 	fill(237, 34, 93, 150);
 	stroke(0);
 	var i = 0;
@@ -64,16 +98,28 @@ var CSV = (A, B) => {
 		vertex(A[i].x, A[i].y, A[i].z);
 		vertex(A[i + 1].x, A[i + 1].y, A[i + 1].z);
 		vertex(B[i].x, B[i].y, B[i].z);
-		endShape(CLOSE);
+		if (closed === true) {
+			endShape(CLOSE);
+		} else {
+			endShape();
+		}
 		beginShape(TRIANGLE_STRIP);
 		vertex(B[i + 1].x, B[i + 1].y, B[i + 1].z);
 		vertex(B[i].x, B[i].y, B[i].z);
 		vertex(A[i + 1].x, A[i + 1].y, A[i + 1].z);
-		endShape(CLOSE);
+		if (closed === true) {
+			endShape(CLOSE);
+		} else {
+			endShape();
+		}
 		beginShape();
 		vertex(A[i].x, A[i].y, A[i].z);
 		vertex(B[i].x, B[i].y, B[i].z);
-		endShape(CLOSE);
+		if (closed === true) {
+			endShape(CLOSE);
+		} else {
+			endShape();
+		}
 		i++;
 	}
 	noFill();
@@ -92,7 +138,7 @@ var CSH1 = (A) => {
 	noFill();
 	stroke(0);
 };
-var CSH2 = (A, B) => {
+var CSH2 = (A, B, closed) => {
 	stroke(0);
 	fill(0, 0, 255, 100);
 	for (let i = 0; i < A.length - 1; i++) {
@@ -180,26 +226,53 @@ var G = (A, B, s) => {
 	}
 	return e;
 };
-var I = (A) => {
+var I = (A, closed = true) => {
 	var X = [];
-	for (let i = 0; i < A.length; i++) {
+	if (closed === false) {
+		X.push(A[0].p);
+	}
+	let i = 0;
+	while (i < A.length) {
 		var a, b, c, d;
-		if (i === 0) {
-			a = A[A.length - 1].p;
-			b = A[A.length - 1].q;
-			c = A[0].p;
-			d = A[0].q;
+		if (closed === true) {
+			if (i === 0) {
+				a = A[A.length - 1].p;
+				b = A[A.length - 1].q;
+				c = A[0].p;
+				d = A[0].q;
+			} else {
+				a = A[i - 1].p;
+				b = A[i - 1].q;
+				c = A[i].p;
+				d = A[i].q;
+			}
 		} else {
-			a = A[i - 1].p;
-			b = A[i - 1].q;
-			c = A[i].p;
-			d = A[i].q;
+			if (i === 0) {
+				a = A[0].p;
+				b = A[0].q;
+				c = A[1].p;
+				d = A[1].q;
+			} else if (i > 1) {
+				a = A[i - 1].p;
+				b = A[i - 1].q;
+				c = A[i].p;
+				d = A[i].q;
+			} else {
+				i++;
+				continue;
+			}
 		}
 		var t1 = D2(V(a, c), V(c, d)) / D2(V(a, b), V(c, d));
 		var p = { x: a.x + t1 * V(a, b).x, y: a.y + t1 * V(a, b).y, z: a.z };
 		X.push(p);
+		i++;
 	}
-	X.push(X[0]);
+	// console.log(closed);
+	if (closed === true) {
+		X.push(X[0]);
+	} else {
+		X.push(A[A.length - 1].q);
+	}
 	return X;
 };
 var L = (p, q, n) => {
@@ -225,7 +298,7 @@ var N1 = (u) => {
 var N2 = (u) => {
 	return { x: u.y, y: -u.x, z: u.z };
 };
-var O = (A, e) => {
+var O = (A, e, closed = true) => {
 	var R = [];
 	let i = 0;
 	while (i < A.length - 1) {
@@ -234,7 +307,7 @@ var O = (A, e) => {
 		R.push({ p, q });
 		i++;
 	}
-	let X = I(R);
+	let X = I(R, closed);
 	return X;
 };
 var S = (u, r) => {

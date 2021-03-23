@@ -40,6 +40,7 @@ const base_points_ht_ = [
 const wall_data1 = {
 	height: 100,
 	depth: 20,
+	closed: false,
 };
 
 //also straight wall with polygon basse
@@ -47,6 +48,7 @@ const wall_data2 = {
 	type: { curve: false },
 	height: 100,
 	depth: 10,
+	closed: false,
 };
 
 // curved wall
@@ -54,12 +56,14 @@ const wall_data3 = {
 	type: { curve: true, curvature: 0.5, smoothness: 10 },
 	height: 100,
 	depth: 30,
+	closed: false,
 };
 
 function setup() {
 	createCanvas(700, 700, WEBGL);
 	setAttributes('antialias', true);
 	strokeWeight(1);
+	// debug();
 }
 
 function draw() {
@@ -70,10 +74,15 @@ function draw() {
 	// calls utils.js to create a "wall-mesh" off the base points
 	// use wall_data to provide the wall height and wall depth (thickness)
 	Construct_Wall(base_points, wall_data1);
-	Construct_Wall(base_points_ht, wall_data1);
-	Construct_Wall(base_points_ht_, wall_data2);
+	/* Construct_Wall(base_points_ht, wall_data1);
+	Construct_Wall(base_points_ht_, wall_data2);  */
 
 	//
 	let extrusion_height = 100;
 	// Extrude_Shape(base_points, extrusion_height);
+}
+
+function debug() {
+	rotateX(0.5);
+	// Construct_Wall(base_points, wall_data1);
 }
