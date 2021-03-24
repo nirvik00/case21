@@ -44,12 +44,15 @@ function Construct_Wall(X, Y) {
 		} else if (Y.type.smoothness < 5) {
 			Y.type.smoothness = 20;
 		}
-		let a = C(A, Y.type.curvature, Y.type.smoothness);
-		let b = C(B, Y.type.curvature, Y.type.smoothness);
-		CSV(a, b);
-		CSV(O(a, W[1]), O(b, W[1]));
-		CSH2(a, O(a, W[1]));
-		CSH2(b, O(b, W[1]));
+		let a = C(A, Y.type.curvature, Y.type.smoothness, Y.closed);
+		let b = C(B, Y.type.curvature, Y.type.smoothness, Y.closed);
+		CSV(a, b, Y.closed);
+		CSV(O(a, W[1], Y.closed), O(b, W[1], Y.closed));
+		CSH2(a, O(a, W[1], Y.closed));
+		CSH2(b, O(b, W[1], Y.closed));
+		if (Y.closed === false) {
+			CSN(a, O(a, W[1], closed), b, O(b, W[1], closed));
+		}
 	} else {
 		CSV(A, B, Y.closed);
 		CSV(O(A, W[1], Y.closed), O(B, W[1], Y.closed), Y.closed);
@@ -166,44 +169,77 @@ var DS = (A) => {
 	noFill();
 	noStroke();
 };
-var C = (A, c, s) => {
+var C = (A, c, s, closed = true) => {
 	let X = [];
-	for (let i = 0; i < A.length - 1; i++) {
-		var p, q, r;
-		if (i === 0) {
-			p = A[A.length - 2];
-			q = A[0];
-			r = A[1];
-		} else {
+	if (closed === true) {
+		for (let i = 0; i < A.length - 1; i++) {
+			var p, q, r;
+			if (i === 0) {
+				p = A[A.length - 2];
+				q = A[0];
+				r = A[1];
+			} else {
+				p = A[i - 1];
+				q = A[i];
+				r = A[i + 1];
+			}
+			let m = {
+				x: p.x + V(p, q).x * c,
+				y: p.y + V(p, q).y * c,
+				z: p.z + V(p, q).z * c,
+			};
+			let a = {
+				x: q.x + V(q, p).x * c,
+				y: q.y + V(q, p).y * c,
+				z: q.z + V(q, p).z * c,
+			};
+			let b = {
+				x: q.x + V(q, r).x * c,
+				y: q.y + V(q, r).y * c,
+				z: q.z + V(q, r).z * c,
+			};
+			let f = L(a, q, s);
+			let g = L(q, b, s);
+			let h = G(f, g, s);
+			h.forEach((x) => {
+				X.push(x);
+			});
+		}
+		X.push(X[0]);
+		DS(X);
+		return X;
+	} else {
+		for (let i = 1; i < A.length - 1; i++) {
+			var p, q, r;
 			p = A[i - 1];
 			q = A[i];
 			r = A[i + 1];
+			let m = {
+				x: p.x + V(p, q).x * c,
+				y: p.y + V(p, q).y * c,
+				z: p.z + V(p, q).z * c,
+			};
+			let a = {
+				x: q.x + V(q, p).x * c,
+				y: q.y + V(q, p).y * c,
+				z: q.z + V(q, p).z * c,
+			};
+			let b = {
+				x: q.x + V(q, r).x * c,
+				y: q.y + V(q, r).y * c,
+				z: q.z + V(q, r).z * c,
+			};
+			let f = L(a, q, s);
+			let g = L(q, b, s);
+			let h = G(f, g, s);
+			h.forEach((x) => {
+				X.push(x);
+			});
 		}
-		let m = {
-			x: p.x + V(p, q).x * c,
-			y: p.y + V(p, q).y * c,
-			z: p.z + V(p, q).z * c,
-		};
-		let a = {
-			x: q.x + V(q, p).x * c,
-			y: q.y + V(q, p).y * c,
-			z: q.z + V(q, p).z * c,
-		};
-		let b = {
-			x: q.x + V(q, r).x * c,
-			y: q.y + V(q, r).y * c,
-			z: q.z + V(q, r).z * c,
-		};
-		let f = L(a, q, s);
-		let g = L(q, b, s);
-		let h = G(f, g, s);
-		h.forEach((x) => {
-			X.push(x);
-		});
+		// X.push(X[0]);
+		DS(X);
+		return X;
 	}
-	X.push(X[0]);
-	DS(X);
-	return X;
 };
 var D = (p, q) => {
 	return Math.sqrt(

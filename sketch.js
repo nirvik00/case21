@@ -56,7 +56,7 @@ const wall_data3 = {
 	type: { curve: true, curvature: 0.5, smoothness: 10 },
 	height: 100,
 	depth: 30,
-	closed: false,
+	// closed: false,
 };
 
 function setup() {
@@ -73,7 +73,7 @@ function draw() {
 	rotateX(0.5);
 	// calls utils.js to create a "wall-mesh" off the base points
 	// use wall_data to provide the wall height and wall depth (thickness)
-	Construct_Wall(base_points, wall_data1);
+	Construct_Wall(base_points, wall_data3);
 	/* Construct_Wall(base_points_ht, wall_data1);
 	Construct_Wall(base_points_ht_, wall_data2);  */
 
