@@ -7,6 +7,11 @@
  * 			Extrude_Shape ( base_points, extrusion_height )
  * 		2. shell/wall-mesh construction:
  * 			Construct_Wall ( base_points, wall_data )
+ *
+ * 		Closed Walls Segments: in wall_data set `closed` key as true or do not insert `closed` key
+ * 		Open Wall Segments: set `closed` key as false
+ * 		by default, the walls are assumed to be closed,
+ * 			=> if closed key is not set, then it will be considered as closed
  */
 
 const a = 100;
@@ -40,7 +45,7 @@ const base_points_ht_ = [
 const wall_data1 = {
 	height: 100,
 	depth: 20,
-	closed: false,
+	closed: true, // closed curve to generate walls
 };
 
 //also straight wall with polygon basse
@@ -48,7 +53,7 @@ const wall_data2 = {
 	type: { curve: false },
 	height: 100,
 	depth: 10,
-	closed: false,
+	closed: false, // curve is open & walls are generated off this curve
 };
 
 // curved wall
@@ -56,14 +61,13 @@ const wall_data3 = {
 	type: { curve: true, curvature: 0.5, smoothness: 10 },
 	height: 100,
 	depth: 30,
-	// closed: false,
+	//closed: false, // default closed curve is assumed
 };
 
 function setup() {
 	createCanvas(700, 700, WEBGL);
 	setAttributes('antialias', true);
 	strokeWeight(1);
-	// debug();
 }
 
 function draw() {
@@ -73,16 +77,11 @@ function draw() {
 	rotateX(0.5);
 	// calls utils.js to create a "wall-mesh" off the base points
 	// use wall_data to provide the wall height and wall depth (thickness)
-	Construct_Wall(base_points, wall_data3);
-	/* Construct_Wall(base_points_ht, wall_data1);
-	Construct_Wall(base_points_ht_, wall_data2);  */
+	Construct_Wall(base_points, wall_data1);
+	Construct_Wall(base_points_ht, wall_data2);
+	Construct_Wall(base_points_ht_, wall_data3);
 
 	//
 	let extrusion_height = 100;
 	// Extrude_Shape(base_points, extrusion_height);
-}
-
-function debug() {
-	rotateX(0.5);
-	// Construct_Wall(base_points, wall_data1);
 }

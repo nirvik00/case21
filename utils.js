@@ -16,7 +16,6 @@ function Extrude_Shape(X, Y) {
 function Construct_Wall(X, Y) {
 	var A = [...X];
 	var W = [];
-	// console.log(Y.closed);
 	try {
 		W = [Y.height, Y.depth, Y.closed];
 	} catch (e) {
@@ -26,11 +25,9 @@ function Construct_Wall(X, Y) {
 		Y.closed = true;
 	}
 	try {
-		if (Y.closed === true) {
-			A.push(A[0]);
-		}
+		if (Y.closed) A.push(A[0]);
 	} catch (err) {
-		A.push(A[0]); // closed not defined, default closed
+		A.push(A[0]);
 	}
 	var B = Aa(A, W[0]);
 	if (Y.type && Y.type.curve === true) {
@@ -50,17 +47,13 @@ function Construct_Wall(X, Y) {
 		CSV(O(a, W[1], Y.closed), O(b, W[1], Y.closed));
 		CSH2(a, O(a, W[1], Y.closed));
 		CSH2(b, O(b, W[1], Y.closed));
-		if (Y.closed === false) {
-			CSN(a, O(a, W[1], closed), b, O(b, W[1], closed));
-		}
+		if (!Y.closed) CSN(a, O(a, W[1], closed), b, O(b, W[1], closed));
 	} else {
 		CSV(A, B, Y.closed);
 		CSV(O(A, W[1], Y.closed), O(B, W[1], Y.closed), Y.closed);
 		CSH2(A, O(A, W[1], closed));
 		CSH2(B, O(B, W[1], Y.closed), Y.closed);
-		if (Y.closed === false) {
-			CSN(A, O(A, W[1], closed), B, O(B, W[1], closed));
-		}
+		if (!Y.closed) CSN(A, O(A, W[1], closed), B, O(B, W[1], closed));
 	}
 }
 var Aa = (A, e) => {
@@ -101,28 +94,19 @@ var CSV = (A, B, closed = true) => {
 		vertex(A[i].x, A[i].y, A[i].z);
 		vertex(A[i + 1].x, A[i + 1].y, A[i + 1].z);
 		vertex(B[i].x, B[i].y, B[i].z);
-		if (closed === true) {
-			endShape(CLOSE);
-		} else {
-			endShape();
-		}
+		if (closed) endShape(CLOSE);
+		else endShape();
 		beginShape(TRIANGLE_STRIP);
 		vertex(B[i + 1].x, B[i + 1].y, B[i + 1].z);
 		vertex(B[i].x, B[i].y, B[i].z);
 		vertex(A[i + 1].x, A[i + 1].y, A[i + 1].z);
-		if (closed === true) {
-			endShape(CLOSE);
-		} else {
-			endShape();
-		}
+		if (closed) endShape(CLOSE);
+		else endShape();
 		beginShape();
 		vertex(A[i].x, A[i].y, A[i].z);
 		vertex(B[i].x, B[i].y, B[i].z);
-		if (closed === true) {
-			endShape(CLOSE);
-		} else {
-			endShape();
-		}
+		if (closed) endShape(CLOSE);
+		else endShape();
 		i++;
 	}
 	noFill();
@@ -171,7 +155,7 @@ var DS = (A) => {
 };
 var C = (A, c, s, closed = true) => {
 	let X = [];
-	if (closed === true) {
+	if (closed) {
 		for (let i = 0; i < A.length - 1; i++) {
 			var p, q, r;
 			if (i === 0) {
@@ -236,7 +220,6 @@ var C = (A, c, s, closed = true) => {
 				X.push(x);
 			});
 		}
-		// X.push(X[0]);
 		DS(X);
 		return X;
 	}
@@ -264,13 +247,11 @@ var G = (A, B, s) => {
 };
 var I = (A, closed = true) => {
 	var X = [];
-	if (closed === false) {
-		X.push(A[0].p);
-	}
+	if (!closed) X.push(A[0].p);
 	let i = 0;
 	while (i < A.length) {
 		var a, b, c, d;
-		if (closed === true) {
+		if (closed) {
 			if (i === 0) {
 				a = A[A.length - 1].p;
 				b = A[A.length - 1].q;
@@ -303,12 +284,8 @@ var I = (A, closed = true) => {
 		X.push(p);
 		i++;
 	}
-	// console.log(closed);
-	if (closed === true) {
-		X.push(X[0]);
-	} else {
-		X.push(A[A.length - 1].q);
-	}
+	if (closed) X.push(X[0]);
+	else X.push(A[A.length - 1].q);
 	return X;
 };
 var L = (p, q, n) => {
