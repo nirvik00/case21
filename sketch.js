@@ -61,7 +61,7 @@ const wall_data3 = {
 	type: { curve: true, curvature: 0.5, smoothness: 10 },
 	height: 100,
 	depth: 30,
-	//closed: false, // default closed curve is assumed
+	closed: false, // default closed curve is assumed
 };
 
 function setup() {

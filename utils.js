@@ -47,13 +47,13 @@ function Construct_Wall(X, Y) {
 		CSV(O(a, W[1], Y.closed), O(b, W[1], Y.closed));
 		CSH2(a, O(a, W[1], Y.closed));
 		CSH2(b, O(b, W[1], Y.closed));
-		if (!Y.closed) CSN(a, O(a, W[1], closed), b, O(b, W[1], closed));
+		if (!Y.closed) CSN(a, O(a, W[1], Y.closed), b, O(b, W[1], Y.closed));
 	} else {
 		CSV(A, B, Y.closed);
 		CSV(O(A, W[1], Y.closed), O(B, W[1], Y.closed), Y.closed);
 		CSH2(A, O(A, W[1], closed));
 		CSH2(B, O(B, W[1], Y.closed), Y.closed);
-		if (!Y.closed) CSN(A, O(A, W[1], closed), B, O(B, W[1], closed));
+		if (!Y.closed) CSN(A, O(A, W[1], Y.closed), B, O(B, W[1], Y.closed));
 	}
 }
 var Aa = (A, e) => {
