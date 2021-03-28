@@ -193,6 +193,7 @@ var C = (A, c, s, closed = true) => {
 		DS(X);
 		return X;
 	} else {
+		X.push(A[0]);
 		for (let i = 1; i < A.length - 1; i++) {
 			var p, q, r;
 			p = A[i - 1];
@@ -220,6 +221,7 @@ var C = (A, c, s, closed = true) => {
 				X.push(x);
 			});
 		}
+		X.push(A[A.length - 1]);
 		DS(X);
 		return X;
 	}

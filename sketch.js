@@ -82,6 +82,6 @@ function draw() {
 	Construct_Wall(base_points_ht_, wall_data3);
 
 	//
-	let extrusion_height = 100;
+	// let extrusion_height = 100;
 	// Extrude_Shape(base_points, extrusion_height);
 }
