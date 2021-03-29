@@ -30,6 +30,14 @@ function Construct_Wall(X, Y) {
 		A.push(A[0]);
 	}
 	var B = Aa(A, W[0]);
+	if (A.length === 2) {
+		CSV(A, B);
+		CSV(O(A, W[1], Y.closed), O(B, W[1], Y.closed), Y.closed);
+		CSH2(A, O(A, W[1], Y.closed));
+		CSH2(B, O(B, W[1], Y.closed), Y.closed);
+		CSN(A, O(A, W[1], Y.closed), B, O(B, W[1], Y.closed));
+		return true;
+	}
 	if (Y.type && Y.type.curve === true) {
 		if (Y.type.curvature > 0.49) {
 			Y.type.curvature = 0.35;
@@ -51,10 +59,11 @@ function Construct_Wall(X, Y) {
 	} else {
 		CSV(A, B, Y.closed);
 		CSV(O(A, W[1], Y.closed), O(B, W[1], Y.closed), Y.closed);
-		CSH2(A, O(A, W[1], closed));
+		CSH2(A, O(A, W[1], Y.closed));
 		CSH2(B, O(B, W[1], Y.closed), Y.closed);
 		if (!Y.closed) CSN(A, O(A, W[1], Y.closed), B, O(B, W[1], Y.closed));
 	}
+	return true;
 }
 var Aa = (A, e) => {
 	let X = [];
@@ -316,6 +325,9 @@ var N2 = (u) => {
 var O = (A, e, closed = true) => {
 	var R = [];
 	let i = 0;
+	if (A.length === 2) {
+		return [T(A[0], S(N1(U(A[0], A[1])), e)), T(A[1], S(N1(U(A[0], A[1])), e))];
+	}
 	while (i < A.length - 1) {
 		let p = T(A[i], S(N1(U(A[i], A[i + 1])), e)),
 			q = T(A[i + 1], S(N1(U(A[i], A[i + 1])), e));

@@ -15,6 +15,23 @@
  */
 
 const a = 100;
+const base_points_2pt_de0 = [
+	{ x: -a, y: -a, z: a / 3 },
+	{ x: 0, y: -a * 2, z: a / 3 },
+];
+const base_points_2pt_de1 = [
+	{ x: 0, y: 0, z: a / 2 },
+	{ x: 0, y: -a * 2, z: a / 2 },
+];
+const base_points_2pt_de2 = [
+	{ x: -a, y: -a, z: a },
+	{ x: 0, y: 0, z: a },
+];
+const wall_data_2pt_de = {
+	height: 30,
+	depth: 20,
+	closed: false,
+};
 const base_points = [
 	{ x: -a, y: -a, z: 0 },
 	{ x: 0, y: -a * 2, z: 0 },
@@ -64,6 +81,14 @@ const wall_data3 = {
 	closed: false, // default closed curve is assumed
 };
 
+// curved wall
+const wall_data4 = {
+	type: { curve: true, curvature: 0.5, smoothness: 10 },
+	height: 100,
+	depth: 30,
+	closed: true, // default closed curve is assumed
+};
+
 function setup() {
 	createCanvas(700, 700, WEBGL);
 	setAttributes('antialias', true);
@@ -75,13 +100,22 @@ function draw() {
 	// camera(500, 500, 500, 0, 0, 0, 0, 0, 1);
 	orbitControl();
 	rotateX(0.5);
+
 	// calls utils.js to create a "wall-mesh" off the base points
 	// use wall_data to provide the wall height and wall depth (thickness)
-	Construct_Wall(base_points, wall_data1);
-	Construct_Wall(base_points_ht, wall_data2);
-	Construct_Wall(base_points_ht_, wall_data3);
 
-	//
-	// let extrusion_height = 100;
-	// Extrude_Shape(base_points, extrusion_height);
+	/* Construct_Wall(base_points, wall_data1);
+	Construct_Wall(base_points_ht, wall_data2);
+	Construct_Wall(base_points_ht_, wall_data3); */
+
+	// test this
+	Construct_Wall(base_points_2pt_de0, wall_data_2pt_de);
+	Construct_Wall(base_points_2pt_de1, wall_data_2pt_de);
+	Construct_Wall(base_points_2pt_de2, wall_data_2pt_de);
+
+	// extrusion
+	/* 
+	let extrusion_height = 100;
+	Extrude_Shape(base_points, extrusion_height);
+	*/
 }
