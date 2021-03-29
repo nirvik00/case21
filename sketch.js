@@ -32,6 +32,8 @@ const wall_data_2pt_de = {
 	depth: 20,
 	closed: false,
 };
+
+//
 const base_points = [
 	{ x: -a, y: -a, z: 0 },
 	{ x: 0, y: -a * 2, z: 0 },
@@ -88,6 +90,19 @@ const wall_data4 = {
 	depth: 30,
 	closed: true, // default closed curve is assumed
 };
+// test 2
+var base_points_test_2 = [
+	{ x: -240, y: -240, z: 0 },
+	{ x: 240, y: -240, z: 0 },
+	{ x: 240, y: 240, z: 0 },
+	{ x: -240, y: 240, z: 0 },
+];
+var wall_data_test_2 = {
+	type: { curve: true, curvature: 0.5, smoothness: 10 },
+	height: 120,
+	depth: 10,
+	closed: false, // curve is open & walls are generated off this curve
+};
 
 function setup() {
 	createCanvas(700, 700, WEBGL);
@@ -107,6 +122,8 @@ function draw() {
 	/* Construct_Wall(base_points, wall_data1);
 	Construct_Wall(base_points_ht, wall_data2);
 	Construct_Wall(base_points_ht_, wall_data3); */
+
+	//Construct_Wall(base_points_test_2, wall_data_test_2);
 
 	// test this
 	Construct_Wall(base_points_2pt_de0, wall_data_2pt_de);
